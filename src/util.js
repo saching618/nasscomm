@@ -5,17 +5,18 @@ client = redis.createClient();
 client.on("error", function (err) {
     console.log("Error " + err);
 });
-const setToken = function(token) {
-    client.set('token', token)
+const setToken = function(token, email) {
+    client.set(token, email)
 }
 
-const getToken = function() {
+const validateToken = function(token) {
     return new Promise((reject, resolve) => {
-        client.get('token', function(err, reply) {
-            if (err) reject('Token Not Found');
-            resolve(reply)
-        })   
+        client.get(token, function(err, reply) {
+            if (err) reject('Some thing went wrong!');
+            console.log('fasfjkjdshf');
+            resolve(reply);
+        })  
     }) 
 }
 
-module.exports = {setToken,getToken}
+module.exports = {setToken, client}
