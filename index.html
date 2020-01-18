@@ -15,6 +15,19 @@
     </style>
   </head>
   <body>
+      <select class="language">
+          <option value="hi">Hindi</option>
+          <option value="od">Odia</option>
+          <option value="pa">Punjabi</option>
+          <option value="gu">Gujrati</option>      
+          <option value="mr">Marathi</option>
+          <option value="te">Telgu</option>
+          <option value="ta">Tamil</option>
+          <option value="as">Assame</option>
+          <option value="bn">Bengali</option>
+          <option value="ml">Malayalam</option>
+          <option value="kn">Kannada</option>
+      </select>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -25,7 +38,11 @@
       $(function () {
         var socket = io();
         $('form').submit(function(){
-          socket.emit('chat message', $('#m').val());
+          var data = {
+            'text': $('#m').val(),
+            'lang': localStorage.getItem('lang') || 'hi'
+          }
+          socket.emit('chat message', JSON.stringify(data));
           $('#m').val('');
           return false;
         });
@@ -33,6 +50,11 @@
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
         });
+      });
+
+      $("select.language").change(function(){
+        var selectedLang = $(this).children("option:selected").val();
+        localStorage.setItem('lang', selectedLang);
       });
     </script>
   </body>

@@ -25,8 +25,10 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    api.convertText([msg],'hi', 'en', token).then((response) => {
+  socket.on('chat message', function(data){
+    console.log(data);
+    var result = JSON.parse(data)
+    api.convertText([result.text], result.lang, 'en', token).then((response) => {
       
       if (response.data.status = 'Success') {
         io.emit('chat message',response.data.data['result'][0][0]);
