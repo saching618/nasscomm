@@ -104,11 +104,16 @@
             'text': $('#m').val(),
             'lang': localStorage.getItem('lang') || 'hi'
           }
-          socket.emit('chat message', JSON.stringify(data));
+          socket.emit('chat_message', JSON.stringify(data));
           $('#m').val('');
           return false;
         });
-        socket.on('chat message', function(msg){
+        socket.on('chat_message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('chat_message_audio', function(msg){
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
         });
