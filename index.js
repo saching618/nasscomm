@@ -26,11 +26,18 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    // io.emit('chat message', msg);
     api.convertText([msg],'hi', 'en', token).then((response) => {
-      io.emit('chat message',response.data.data['result'][0][0]);
-      console.log(response.data.data['result']);
+      
+      if (response.data.status = 'Success') {
+        io.emit('chat message',response.data.data['result'][0][0]);
+      } else {
+        io.emit('chat message', 'Sorry Service is down.');
+      }
+
+    }).catch(err => {
+      console.log(err);
     })
+
   });
 });
 
@@ -39,4 +46,25 @@ http.listen(port, function(){
 });
 
 
-// http://localhost:3000/?email=keshariratnesh@gmail.com
+ // api.convertTextToAudio(msg, 'en', token)
+    //   .then(function (response) {
+    //     console.log('convertTextToAudio response')
+    //     console.log(response.status)
+    //     if(response.status == 200){
+    //       let res = {};
+    //       res['status'] =response.status;
+    //       res['data'] =  response.data;
+    //       console.log(res.data);
+    //       return res;
+    //     }else{
+    //       let res = {};
+    //       res['status'] = response.status;
+    //       res['data'] = "error";
+    //       console.log(res);
+    //       return res;
+    //     }
+    // })
+    // .catch(err => {
+    //   console.log('convertTextToAudio error response')
+    //   console.log(err);
+    // })

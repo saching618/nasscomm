@@ -58,27 +58,28 @@ const convertTextToAudio = function(text, lang, token) {
         }
       });
 
-      client.post('/tts', raw_data).then(function (response) {
-          console.log('convertTextToAudio response')
-          console.log(response.status)
-          if(response.status ==200){
-            let res = {};
-            res['status'] =response.status;
-            res['data'] =  response.data;
-            console.log(res.data);
-            return res;
-          }else{
-            let res = {};
-            res['status'] =response.status;
-            res['data'] = "error";
-            console.log(res);
-            return res;
-          }
-      })
-      .catch(function (error) {
-        console.log('convertTextToAudio error response')
-        console.log(error);
-      })
+    return client.post('/tts', raw_data)
+      // .then(function (response) {
+      //     console.log('convertTextToAudio response')
+      //     console.log(response.status)
+      //     if(response.status == 200){
+      //       let res = {};
+      //       res['status'] =response.status;
+      //       res['data'] =  response.data;
+      //       console.log(res.data);
+      //       return res;
+      //     }else{
+      //       let res = {};
+      //       res['status'] =response.status;
+      //       res['data'] = "error";
+      //       console.log(res);
+      //       return res;
+      //     }
+      // })
+      // .catch(function (error) {
+      //   console.log('convertTextToAudio error response')
+      //   console.log(error);
+      // })
 }
 
 module.exports = {getAccessToken, convertText, convertTextToAudio, redisClient}
