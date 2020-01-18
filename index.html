@@ -13,31 +13,91 @@
       #messages li:nth-child(odd) { background: #eee; }
       #messages { margin-bottom: 40px }
     </style> -->
+    <!-- Font Awesome -->
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/css/mdb.min.css" rel="stylesheet">
+
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/js/mdb.min.js"></script>
   </head>
   <body>
+    <!--Navbar -->
+<!--Navbar -->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark orange lighten-1">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
+    aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent-555">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+      <li class="nav-item avatar">
+        <a class="nav-link p-0" href="#">
+          <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" class="rounded-circle z-depth-0"
+            alt="avatar image" height="35">
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!--/.Navbar -->
     <div class="container">
       <form action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
-        <select class="language">
-          <option value="hi">Hindi</option>
-          <option value="od">Odia</option>
-          <option value="pa">Punjabi</option>
-          <option value="gu">Gujrati</option>      
-          <option value="mr">Marathi</option>
-          <option value="te">Telgu</option>
-          <option value="ta">Tamil</option>
-          <option value="as">Assame</option>
-          <option value="bn">Bengali</option>
-          <option value="ml">Malayalam</option>
-          <option value="kn">Kannada</option>
-        </select>
+        <div class="form-group">
+          <label for="msg">Message</label>
+          <input  type="textarea" class="form-control" id="m" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label for="sel1">Langauge</label>
+          <select class="form-control language" value="" id="language">
+            <option value="-1">Select Langauge</option>
+            <option value="hi">Hindi</option>
+            <option value="od">Odia</option>
+            <option value="pa">Punjabi</option>
+            <option value="gu">Gujrati</option>      
+            <option value="mr">Marathi</option>
+            <option value="te">Telgu</option>
+            <option value="ta">Tamil</option>
+            <option value="as">Assame</option>
+            <option value="bn">Bengali</option>
+            <option value="ml">Malayalam</option>
+            <option value="kn">Kannada</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-success" id="send">Send</button>
       </form>
     </div>
     <ul id="messages"></ul>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
     <script>
+      var socket = io();
       $(function () {
+        $('#language').val(localStorage.getItem('lang'));
         var socket = io();
         $('form').submit(function(){
           var data = {
@@ -55,9 +115,24 @@
       });
 
       $("select.language").change(function(){
-        var selectedLang = $(this).children("option:selected").val();
+        let selectedLang = $(this).children("option:selected").val();
         localStorage.setItem('lang', selectedLang);
       });
+
+      $("#send").click(function(){
+        var data = {
+            'text': $('#m').val(),
+            'lang': localStorage.getItem('lang') || 'hi'
+          }
+          if($('#m').val() == "" || $('#m').val() == null){
+            alert('Enter Message');
+          }
+          socket.emit('chat message', JSON.stringify(data));
+          $('#m').val('');
+          return false;
+      });
+
+
     </script>
   </body>
 </html>
