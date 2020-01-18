@@ -2,21 +2,22 @@
 const util = require('./util')
 const axios = require('axios')
 const redisClient = util.client
-function getAccessToken(email) {
+
+const getAccessToken = function(email) {
   const client = axios.create({
     baseURL: `https://hackapi.reverieinc.com/token?email=${email}`,
     headers: { 'content-type': 'application/json' }
   });
 
   client.get().then(function (response) {
-      util.setToken(response.data['message'], email)
+      util.setToken('token', response.data['message']);
   })
   .catch(function (error) {
     console.log(error);
   })
 }
 
-function convertText(text, tgt, src, token){
+const convertText = function(text, tgt, src, token){
 
     const raw_data = {
         'data': text,
@@ -32,17 +33,18 @@ function convertText(text, tgt, src, token){
         }
       });
 
-      client.post('/nmt', raw_data).then(function (response) {
-          console.log('contentText response')
-          console.log(response.data.data)
-      })
-      .catch(function (error) {
-        console.log('contentText error response')
-        console.log(error);
-      })
+      return client.post('/nmt', raw_data)
+      // .then(function (response) {
+      //     console.log('contentText response')
+      //     console.log(response.data.data)
+      // })
+      // .catch(function (error) {
+      //   console.log('contentText error response')
+      //   console.log(error);
+      // })
 }
 
-function convertTextToAudio(text, lang, token) {
+const convertTextToAudio = function(text, lang, token) {
     const raw_data = {
         'text': text,
         'lang': lang,
@@ -79,16 +81,18 @@ function convertTextToAudio(text, lang, token) {
       })
 }
 
-var token = 'e8a79f08677139a4e990a14d511faae0c6c7841b';
-redisClient.get(token, function(err, reply) {
-  if (err) {
-     console.log('Something went wrong.');
-  }
-  if (reply) {
-    convertText(['hi Hello'],'hi', 'en', token);
-    console.log(reply);
-  } else{
-    console.log("Unauthorized");
-  }
-})
+module.exports = {getAccessToken, convertText, convertTextToAudio, redisClient}
+
+// var token = 'e8a79f08677139a4e990a14d511faae0c6c7841b';
+// redisClient.get(token, function(err, reply) {
+//   if (err) {
+//      console.log('Something went wrong.');
+//   }
+//   if (reply) {
+//     convertText(['hi Hello'],'hi', 'en', token);
+//     console.log(reply);
+//   } else{
+//     console.log("Unauthorized");
+//   }
+// })
 

@@ -5,8 +5,8 @@ client = redis.createClient();
 client.on("error", function (err) {
     console.log("Error " + err);
 });
-const setToken = function(token, email) {
-    client.set(token, email)
+const setToken = function(email, token) {
+    client.set(email, token);
 }
 
 
