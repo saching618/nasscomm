@@ -42,23 +42,7 @@ function convertText(text, tgt, src, token){
       })
 }
 
-
-var token = 'e8a79f08677139a4e990a14d511faae0c6c7841b';
-redisClient.get(token, function(err, reply) {
-  if (err) {
-     console.log('Something went wrong.');
-  }
-  if (reply) {
-    convertText(['hi Hello'],'hi', 'en', token);
-    console.log(reply);
-  } else{
-    console.log("Unauthorized");
-  }
-})  
-// convertText(['Hi Ramu'], 'hi', 'en', 'e8a79f08677139a4e990a14d511faae0c6c7841b');
-
-
-function convertTextToAudio(text, lang, token){
+function convertTextToAudio(text, lang, token) {
     const raw_data = {
         'text': text,
         'lang': lang,
@@ -93,6 +77,18 @@ function convertTextToAudio(text, lang, token){
         console.log('convertTextToAudio error response')
         console.log(error);
       })
-
 }
+
+var token = 'e8a79f08677139a4e990a14d511faae0c6c7841b';
+redisClient.get(token, function(err, reply) {
+  if (err) {
+     console.log('Something went wrong.');
+  }
+  if (reply) {
+    convertText(['hi Hello'],'hi', 'en', token);
+    console.log(reply);
+  } else{
+    console.log("Unauthorized");
+  }
+})
 
